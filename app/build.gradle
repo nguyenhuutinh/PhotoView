@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.bm.photoview"
-        minSdkVersion 14 // Recommended to use 14 or higher for compatibility
+        minSdkVersion 21 // Recommended to use 14 or higher for compatibility
         targetSdkVersion 34
         versionCode 2
         versionName "2.0.2"
