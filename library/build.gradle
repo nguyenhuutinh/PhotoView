@@ -1,20 +1,17 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'com.github.dcendents.android-maven'
-//apply plugin: 'com.jfrog.bintray'
-
-version "1.4.1"
+apply plugin: 'maven-publish'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
-    resourcePrefix "photoview"
+    compileSdkVersion 34
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
-        minSdkVersion 10
-        targetSdkVersion 23
+        minSdkVersion 14
+        targetSdkVersion 34
         versionCode 5
-        versionName version
+        versionName "1.4.1"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -24,76 +21,73 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.1'
+    implementation 'androidx.annotation:annotation:1.6.0'
+    implementation 'androidx.core:core:1.12.0'
 }
 
-//def siteUrl = 'https://github.com/bm-x/PhotoView'
-//def gitUrl = 'https://github.com/bm-x/PhotoView.git'
-//group = "com.bm.photoview"
-//install {
-//    repositories.mavenInstaller {
-//         //This generates POM.xml with proper parameters
-//        pom {
-//            project {
-//                packaging 'aar'
-//                // Add your description here
-//                name 'PhotoView'
-//                url siteUrl
-//               //  Set your license
-//                licenses {
-//                    license {
-//                        name 'The Apache Software License, Version 2.0'
-//                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                    }
-//                }
-//                developers {
-//                    developer {
-//                        id 'photoview'
-//                        name 'bmme'
-//                        email 'bmme@vip.qq.com'
-//                    }
-//                }
-//                scm {
-//                    connection gitUrl
-//                    developerConnection gitUrl
-//                    url siteUrl
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//task sourcesJar(type: Jar) {
-//    from android.sourceSets.main.java.srcDirs
-//    classifier = 'sources'
-//}
-//task javadoc(type: Javadoc) {
-//    options.encoding = "UTF-8"
-//    source = android.sourceSets.main.java.srcDirs
-//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-//}
-//task javadocJar(type: Jar, dependsOn: javadoc) {
-//    classifier = 'javadoc'
-//    from javadoc.destinationDir
-//}
-//artifacts {
-//    archives javadocJar
-//    archives sourcesJar
-//}
-//Properties properties = new Properties()
-//properties.load(project.rootProject.file('local.properties').newDataInputStream())
-//bintray {
-//    user = properties.getProperty("bintray.user")
-//    key = properties.getProperty("bintray.apikey")
-//    configurations = ['archives']
-//    pkg {
-//        repo = "maven"
-//        name = "PhotoView"
-//        websiteUrl = siteUrl
-//        vcsUrl = gitUrl
-//        licenses = ["Apache-2.0"]
-//        publish = true
-//    }
-//}
+// Task for sources JAR
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
 
-// gradlew bintrayUpload
+// Task for Javadoc
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+// Task for Javadoc JAR
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier.set('javadoc')
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            // Include the release AAR artifact
+            artifact("$buildDir/outputs/aar/${project.name}-release.aar")
+
+            // Include the sources JAR
+            artifact sourcesJar
+
+            // Optionally include Javadoc JAR
+            artifact javadocJar
+
+            groupId = 'com.bm'
+            artifactId = 'photoview'
+            version = '1.4.1'
+
+            pom.withXml {
+                asNode().appendNode('description', 'An advanced photo view library for Android.')
+                asNode().appendNode('name', 'PhotoView')
+                asNode().appendNode('url', 'https://github.com/bm-x/PhotoView')
+
+                def licensesNode = asNode().appendNode('licenses')
+                def licenseNode = licensesNode.appendNode('license')
+                licenseNode.appendNode('name', 'MIT License')
+                licenseNode.appendNode('url', 'https://opensource.org/licenses/MIT')
+
+                def developersNode = asNode().appendNode('developers')
+                def developerNode = developersNode.appendNode('developer')
+                developerNode.appendNode('id', 'bm-x')
+                developerNode.appendNode('name', 'BM-X')
+                developerNode.appendNode('email', 'developer@example.com')
+
+                def scmNode = asNode().appendNode('scm')
+                scmNode.appendNode('connection', 'scm:git:git://github.com/bm-x/PhotoView.git')
+                scmNode.appendNode('developerConnection', 'scm:git:ssh://git@github.com:bm-x/PhotoView.git')
+                scmNode.appendNode('url', 'https://github.com/bm-x/PhotoView')
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url = uri("$buildDir/repo")
+        }
+    }
+}
