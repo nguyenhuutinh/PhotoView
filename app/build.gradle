@@ -1,16 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 34
+    buildToolsVersion "30.0.3"
+    namespace "com.example.bm.photoview"
 
     defaultConfig {
-        applicationId "com.example.bm.photoview"
-        minSdkVersion 10
-        targetSdkVersion 23
+        applicationId "com.bm.photoview"
+        minSdkVersion 14 // Recommended to use 14 or higher for compatibility
+        targetSdkVersion 34
         versionCode 2
         versionName "2.0.2"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -20,8 +22,18 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.1.0'
-    compile 'com.github.bumptech.glide:glide:3.6.1'
-    compile project(':library')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    // Use AndroidX instead of support libraries
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.1'
+
+    // Glide for image loading
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+
+    // Include your local library
+    implementation project(':library')
 }

@@ -82,30 +82,20 @@ public class ImgClick extends Activity implements RadioGroup.OnCheckedChangeList
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-        switch (checkedId) {
-            case R.id.center:
-                mImg1.setScaleType(ImageView.ScaleType.CENTER);
-                break;
-            case R.id.center_crop:
-                mImg1.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                break;
-            case R.id.center_inside:
-                mImg1.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                break;
-            case R.id.fit_center:
-                mImg1.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                break;
-
-            // 建议用了fit_Xy,fit_end,fit_start就不要使用缩放或者animaFrom或animaTo
-            case R.id.fit_end:
-                mImg1.setScaleType(ImageView.ScaleType.FIT_END);
-                break;
-            case R.id.fit_start:
-                mImg1.setScaleType(ImageView.ScaleType.FIT_START);
-                break;
-            case R.id.fit_xy:
-                mImg1.setScaleType(ImageView.ScaleType.FIT_XY);
-                break;
+        if (checkedId == R.id.center) {
+            mImg1.setScaleType(ImageView.ScaleType.CENTER);
+        } else if (checkedId == R.id.center_crop) {
+            mImg1.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        } else if (checkedId == R.id.center_inside) {
+            mImg1.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        } else if (checkedId == R.id.fit_center) {
+            mImg1.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        } else if (checkedId == R.id.fit_end) {
+            mImg1.setScaleType(ImageView.ScaleType.FIT_END);
+        } else if (checkedId == R.id.fit_start) {
+            mImg1.setScaleType(ImageView.ScaleType.FIT_START);
+        } else if (checkedId == R.id.fit_xy) {
+            mImg1.setScaleType(ImageView.ScaleType.FIT_XY);
         }
     }
 }
